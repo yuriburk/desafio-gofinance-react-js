@@ -17,17 +17,21 @@ export const Title = styled.h1`
 `;
 
 export const CardContainer = styled.section`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 32px;
+  display: flex;
+  justify-content: space-between;
   margin-top: -150px;
 `;
 
 export const Card = styled.div`
+  flex: 1;
   background: ${({ total }: CardProps): string => (total ? '#FF872C' : '#fff')};
   padding: 22px 32px;
   border-radius: 5px;
   color: ${({ total }: CardProps): string => (total ? '#fff' : '#363F5F')};
+
+  & + div {
+    margin-left: 31px;
+  }
 
   header {
     display: flex;

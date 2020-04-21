@@ -23,6 +23,13 @@ export const ImportFileContainer = styled.section`
   padding: 64px;
 `;
 
+export const Error = styled.span`
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  color: #e83f5b;
+`;
+
 export const Footer = styled.section`
   margin-top: 36px;
   display: flex;
