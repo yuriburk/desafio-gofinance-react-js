@@ -43,61 +43,65 @@ describe('Dashboard', () => {
   it('should be able to list the total balance inside the cards', async () => {
     const { getByTestId } = render(<App />);
 
-    apiMock.onGet('transactions?take=10&skip=0').reply(200, {
-      transactions: [
-        {
-          id: '807da2da-4ba6-4e45-b4f8-828d900c2adf',
-          title: 'Loan',
-          type: 'income',
-          value: 1500,
-          category: {
-            id: '12a0cff7-8691-456d-b1ad-172d777f1942',
-            title: 'Others',
+    apiMock
+      .onGet(
+        'transactions?take=10&skip=0&sort=transaction.created_at&order=ASC',
+      )
+      .reply(200, {
+        transactions: [
+          {
+            id: '807da2da-4ba6-4e45-b4f8-828d900c2adf',
+            title: 'Loan',
+            type: 'income',
+            value: 1500,
+            category: {
+              id: '12a0cff7-8691-456d-b1ad-172d777f1942',
+              title: 'Others',
+              created_at: '2020-04-17T19:05:34.000Z',
+              updated_at: '2020-04-17T19:05:34.000Z',
+            },
+            category_id: '12a0cff7-8691-456d-b1ad-172d777f1942',
             created_at: '2020-04-17T19:05:34.000Z',
             updated_at: '2020-04-17T19:05:34.000Z',
           },
-          category_id: '12a0cff7-8691-456d-b1ad-172d777f1942',
-          created_at: '2020-04-17T19:05:34.000Z',
-          updated_at: '2020-04-17T19:05:34.000Z',
-        },
-        {
-          id: '3cd3b0e3-73ef-44e9-9f19-8d815eaa7bb4',
-          title: 'Computer',
-          type: 'income',
-          value: 4500,
-          category: {
-            id: '12a0cff7-8691-456d-b1ad-172d777f1942',
-            title: 'Sell',
+          {
+            id: '3cd3b0e3-73ef-44e9-9f19-8d815eaa7bb4',
+            title: 'Computer',
+            type: 'income',
+            value: 4500,
+            category: {
+              id: '12a0cff7-8691-456d-b1ad-172d777f1942',
+              title: 'Sell',
+              created_at: '2020-04-18T19:05:34.000Z',
+              updated_at: '2020-04-17T19:05:34.000Z',
+            },
+            category_id: '12a0cff7-8691-456d-b1ad-172d777f1942',
             created_at: '2020-04-18T19:05:34.000Z',
-            updated_at: '2020-04-17T19:05:34.000Z',
+            updated_at: '2020-04-18T19:05:34.000Z',
           },
-          category_id: '12a0cff7-8691-456d-b1ad-172d777f1942',
-          created_at: '2020-04-18T19:05:34.000Z',
-          updated_at: '2020-04-18T19:05:34.000Z',
-        },
-        {
-          id: 'fb21571c-1087-4427-800c-3c30a484decf',
-          title: 'Website Hosting',
-          type: 'outcome',
-          value: 50,
-          category: {
-            id: '12a0cff7-8691-456d-b1ad-172d777f1942',
-            title: 'Hosting',
-            created_at: '2020-04-17T19:05:34.000Z',
-            updated_at: '2020-04-17T19:05:34.000Z',
+          {
+            id: 'fb21571c-1087-4427-800c-3c30a484decf',
+            title: 'Website Hosting',
+            type: 'outcome',
+            value: 50,
+            category: {
+              id: '12a0cff7-8691-456d-b1ad-172d777f1942',
+              title: 'Hosting',
+              created_at: '2020-04-17T19:05:34.000Z',
+              updated_at: '2020-04-17T19:05:34.000Z',
+            },
+            category_id: '12a0cff7-8691-456d-b1ad-172d777f1942',
+            created_at: '2020-04-19T19:05:34.000Z',
+            updated_at: '2020-04-19T19:05:34.000Z',
           },
-          category_id: '12a0cff7-8691-456d-b1ad-172d777f1942',
-          created_at: '2020-04-19T19:05:34.000Z',
-          updated_at: '2020-04-19T19:05:34.000Z',
+        ],
+        balance: {
+          income: 6000,
+          outcome: 50,
+          total: 5950,
         },
-      ],
-      balance: {
-        income: 6000,
-        outcome: 50,
-        total: 5950,
-      },
-      count: 3,
-    });
+        count: 3,
+      });
 
     await actWait();
 
@@ -111,61 +115,65 @@ describe('Dashboard', () => {
   it('should be able to list the transactions', async () => {
     const { getByText } = render(<App />);
 
-    apiMock.onGet('transactions?take=10&skip=0').reply(200, {
-      transactions: [
-        {
-          id: '807da2da-4ba6-4e45-b4f8-828d900c2adf',
-          title: 'Loan',
-          type: 'income',
-          value: 1500,
-          category: {
-            id: '12a0cff7-8691-456d-b1ad-172d777f1942',
-            title: 'Others',
+    apiMock
+      .onGet(
+        'transactions?take=10&skip=0&sort=transaction.created_at&order=ASC',
+      )
+      .reply(200, {
+        transactions: [
+          {
+            id: '807da2da-4ba6-4e45-b4f8-828d900c2adf',
+            title: 'Loan',
+            type: 'income',
+            value: 1500,
+            category: {
+              id: '12a0cff7-8691-456d-b1ad-172d777f1942',
+              title: 'Others',
+              created_at: '2020-04-17T19:05:34.000Z',
+              updated_at: '2020-04-17T19:05:34.000Z',
+            },
+            category_id: '12a0cff7-8691-456d-b1ad-172d777f1942',
             created_at: '2020-04-17T19:05:34.000Z',
             updated_at: '2020-04-17T19:05:34.000Z',
           },
-          category_id: '12a0cff7-8691-456d-b1ad-172d777f1942',
-          created_at: '2020-04-17T19:05:34.000Z',
-          updated_at: '2020-04-17T19:05:34.000Z',
-        },
-        {
-          id: '3cd3b0e3-73ef-44e9-9f19-8d815eaa7bb4',
-          title: 'Computer',
-          type: 'income',
-          value: 4500,
-          category: {
-            id: '12a0cff7-8691-456d-b1ad-172d777f1942',
-            title: 'Sell',
+          {
+            id: '3cd3b0e3-73ef-44e9-9f19-8d815eaa7bb4',
+            title: 'Computer',
+            type: 'income',
+            value: 4500,
+            category: {
+              id: '12a0cff7-8691-456d-b1ad-172d777f1942',
+              title: 'Sell',
+              created_at: '2020-04-18T19:05:34.000Z',
+              updated_at: '2020-04-17T19:05:34.000Z',
+            },
+            category_id: '12a0cff7-8691-456d-b1ad-172d777f1942',
             created_at: '2020-04-18T19:05:34.000Z',
-            updated_at: '2020-04-17T19:05:34.000Z',
+            updated_at: '2020-04-18T19:05:34.000Z',
           },
-          category_id: '12a0cff7-8691-456d-b1ad-172d777f1942',
-          created_at: '2020-04-18T19:05:34.000Z',
-          updated_at: '2020-04-18T19:05:34.000Z',
-        },
-        {
-          id: 'fb21571c-1087-4427-800c-3c30a484decf',
-          title: 'Website Hosting',
-          type: 'outcome',
-          value: 50,
-          category: {
-            id: '12a0cff7-8691-456d-b1ad-172d777f1942',
-            title: 'Hosting',
-            created_at: '2020-04-17T19:05:34.000Z',
-            updated_at: '2020-04-17T19:05:34.000Z',
+          {
+            id: 'fb21571c-1087-4427-800c-3c30a484decf',
+            title: 'Website Hosting',
+            type: 'outcome',
+            value: 50,
+            category: {
+              id: '12a0cff7-8691-456d-b1ad-172d777f1942',
+              title: 'Hosting',
+              created_at: '2020-04-17T19:05:34.000Z',
+              updated_at: '2020-04-17T19:05:34.000Z',
+            },
+            category_id: '12a0cff7-8691-456d-b1ad-172d777f1942',
+            created_at: '2020-04-19T19:05:34.000Z',
+            updated_at: '2020-04-19T19:05:34.000Z',
           },
-          category_id: '12a0cff7-8691-456d-b1ad-172d777f1942',
-          created_at: '2020-04-19T19:05:34.000Z',
-          updated_at: '2020-04-19T19:05:34.000Z',
+        ],
+        balance: {
+          income: 6000,
+          outcome: 50,
+          total: 5950,
         },
-      ],
-      balance: {
-        income: 6000,
-        outcome: 50,
-        total: 5950,
-      },
-      count: 3,
-    });
+        count: 3,
+      });
 
     await actWait();
 

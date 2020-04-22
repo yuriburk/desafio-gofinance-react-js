@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Pagination from '@material-ui/lab/Pagination';
 
 import income from '../../assets/income.svg';
 import outcome from '../../assets/outcome.svg';
@@ -8,17 +7,12 @@ import total from '../../assets/total.svg';
 import api from '../../services/api';
 
 import Header from '../../components/Header';
+import Pagination from '../../components/Pagination';
 
 import formatValue from '../../utils/formatValue';
 import formatDate from '../../utils/formatDate';
 
-import {
-  Container,
-  CardContainer,
-  Card,
-  TableContainer,
-  PaginationContainer,
-} from './styles';
+import { Container, CardContainer, Card, TableContainer } from './styles';
 
 interface Transaction {
   id: string;
@@ -38,56 +32,32 @@ interface Balance {
 interface Response {
   transactions: Transaction[];
   balance: Balance;
-  count?: number;
-}
-
-interface Query {
-  take: number;
-  skip: number;
+  count: number;
 }
 
 const Dashboard: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [balance, setBalance] = useState<Balance | null>(null);
-  const [query, setQuery] = useState<Query>({ take: 10, skip: 0 });
-  const [pages, setPages] = useState(0);
-  const [count, setCount] = useState<number>(0);
+  const [count, setCount] = useState(0);
 
-  async function loadTransactions(useQuery: Query): Promise<void> {
-    try {
-      const { data } = await api.get<Response>(
-        `transactions?take=${useQuery.take}&skip=${useQuery.skip}`,
-      );
+  async function loadTransactions(
+    take = 10,
+    skip = 0,
+    sort = 'transaction.created_at',
+    order = 'ASC',
+  ): Promise<void> {
+    const { data } = await api.get<Response>(
+      `transactions?take=${take}&skip=${skip}&sort=${sort}&order=${order}`,
+    );
 
-      setTransactions(data.transactions);
-      setBalance(data.balance);
-      setCount(data.count ?? 0);
-      setPages(Math.ceil(data.count ? data.count / 10 : 0));
-    } catch (error) {
-      console.error(error.message);
-    }
+    setTransactions(data.transactions);
+    setBalance(data.balance);
+    setCount(data.count);
   }
 
   useEffect(() => {
-    loadTransactions(query);
-  }, [query]);
-
-  function handlePagination(page: number): void {
-    const nextQuery: Query = {
-      take: query.take,
-      skip: page * 10 - 10,
-    };
-
-    setQuery(nextQuery);
-  }
-
-  function getInitialPageItems(): number {
-    return query.skip + 1;
-  }
-
-  function getFinalPageItems(): number {
-    return query.skip + 10 > count ? count : query.skip + 10;
-  }
+    loadTransactions();
+  }, []);
 
   return (
     <>
@@ -123,7 +93,9 @@ const Dashboard: React.FC = () => {
           <table>
             <thead>
               <tr>
-                <th>Título</th>
+                <th>
+                  <div>Título</div>
+                </th>
                 <th>Preço</th>
                 <th>Categoria</th>
                 <th>Data</th>
@@ -144,18 +116,12 @@ const Dashboard: React.FC = () => {
               ))}
             </tbody>
           </table>
-          {pages > 0 && (
-            <PaginationContainer>
-              <span>
-                {`${getInitialPageItems()} - ${getFinalPageItems()} de ${count} transações`}
-              </span>
-              <Pagination
-                count={pages}
-                shape="rounded"
-                onChange={(_, page) => handlePagination(page)}
-              />
-            </PaginationContainer>
-          )}
+          <Pagination
+            totalItems={count}
+            handleQuery={(take: number, skip: number) =>
+              loadTransactions(take, skip)
+            }
+          />
         </TableContainer>
       </Container>
     </>
