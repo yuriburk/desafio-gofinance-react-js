@@ -43,7 +43,7 @@ describe('Dashboard', () => {
   it('should be able to list the total balance inside the cards', async () => {
     const { getByTestId } = render(<App />);
 
-    apiMock.onGet('transactions').reply(200, {
+    apiMock.onGet('transactions?take=10&skip=0').reply(200, {
       transactions: [
         {
           id: '807da2da-4ba6-4e45-b4f8-828d900c2adf',
@@ -96,6 +96,7 @@ describe('Dashboard', () => {
         outcome: 50,
         total: 5950,
       },
+      count: 3,
     });
 
     await actWait();
@@ -110,7 +111,7 @@ describe('Dashboard', () => {
   it('should be able to list the transactions', async () => {
     const { getByText } = render(<App />);
 
-    apiMock.onGet('transactions').reply(200, {
+    apiMock.onGet('transactions?take=10&skip=0').reply(200, {
       transactions: [
         {
           id: '807da2da-4ba6-4e45-b4f8-828d900c2adf',
@@ -163,6 +164,7 @@ describe('Dashboard', () => {
         outcome: 50,
         total: 5950,
       },
+      count: 3,
     });
 
     await actWait();

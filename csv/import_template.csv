@@ -1,0 +1,13 @@
+title, type, value, category
+Loan, income, 1500, Others
+Website Hosting, outcome, 50, Others
+Ice cream, outcome, 3, Food
+Grocery, outcome, 200, Food
+ReactJS project, income, 5000, Software
+Pizza, outcome, 50, Food
+ReactNative Project, income, 5000, Software
+NodeJS project, income, 5000, Software
+Nubank, outcome, 1000, Credit Card
+Hamburguer, outcome, 80, Food
+Movie theater, outcome, 25, Others
+Blog Domain, outcome, 40, Software

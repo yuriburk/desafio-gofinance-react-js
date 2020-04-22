@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Pagination from '@material-ui/lab/Pagination';
 
 import income from '../../assets/income.svg';
 import outcome from '../../assets/outcome.svg';
@@ -11,7 +12,13 @@ import Header from '../../components/Header';
 import formatValue from '../../utils/formatValue';
 import formatDate from '../../utils/formatDate';
 
-import { Container, CardContainer, Card, TableContainer } from './styles';
+import {
+  Container,
+  CardContainer,
+  Card,
+  TableContainer,
+  PaginationContainer,
+} from './styles';
 
 interface Transaction {
   id: string;
@@ -31,22 +38,56 @@ interface Balance {
 interface Response {
   transactions: Transaction[];
   balance: Balance;
+  count?: number;
+}
+
+interface Query {
+  take: number;
+  skip: number;
 }
 
 const Dashboard: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [balance, setBalance] = useState<Balance | null>(null);
+  const [query, setQuery] = useState<Query>({ take: 10, skip: 0 });
+  const [pages, setPages] = useState(0);
+  const [count, setCount] = useState<number>(0);
 
-  useEffect(() => {
-    async function loadTransactions(): Promise<void> {
-      const { data } = await api.get<Response>('transactions');
+  async function loadTransactions(useQuery: Query): Promise<void> {
+    try {
+      const { data } = await api.get<Response>(
+        `transactions?take=${useQuery.take}&skip=${useQuery.skip}`,
+      );
 
       setTransactions(data.transactions);
       setBalance(data.balance);
+      setCount(data.count ?? 0);
+      setPages(Math.ceil(data.count ? data.count / 10 : 0));
+    } catch (error) {
+      console.error(error.message);
     }
+  }
 
-    loadTransactions();
-  }, []);
+  useEffect(() => {
+    loadTransactions(query);
+  }, [query]);
+
+  function handlePagination(page: number): void {
+    const nextQuery: Query = {
+      take: query.take,
+      skip: page * 10 - 10,
+    };
+
+    setQuery(nextQuery);
+  }
+
+  function getInitialPageItems(): number {
+    return query.skip + 1;
+  }
+
+  function getFinalPageItems(): number {
+    return query.skip + 10 > count ? count : query.skip + 10;
+  }
 
   return (
     <>
@@ -103,6 +144,18 @@ const Dashboard: React.FC = () => {
               ))}
             </tbody>
           </table>
+          {pages > 0 && (
+            <PaginationContainer>
+              <span>
+                {`${getInitialPageItems()} - ${getFinalPageItems()} de ${count} transações`}
+              </span>
+              <Pagination
+                count={pages}
+                shape="rounded"
+                onChange={(_, page) => handlePagination(page)}
+              />
+            </PaginationContainer>
+          )}
         </TableContainer>
       </Container>
     </>
